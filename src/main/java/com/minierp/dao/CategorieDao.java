@@ -10,10 +10,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CategorieDao {
 
     private final List<Categorie> categories = new ArrayList<>();
-    private final AtomicInteger idCounter = new AtomicInteger(1);
+    private final AtomicInteger idCounter = new AtomicInteger(0);
 
     public boolean creer(Categorie c) {
-        c.setId(idCounter.incrementAndGet());
+        c.setId(idCounter.getAndIncrement());
         categories.add(c);
         return true;
     }
@@ -70,7 +70,6 @@ public class CategorieDao {
     public List<Categorie> listerSousCategories(int idParent) {
         return categories.stream().filter(c -> c.getNiveau() != 0 && c.getCategorieParente().getId() == idParent).toList();
     }
-
 
     public String getCheminComplet(int id) {
         Categorie c = rechercherParId(id);

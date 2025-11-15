@@ -8,7 +8,6 @@ public class Fournisseur {
 
     private static final AtomicInteger SEQUENCE = new AtomicInteger(5000);
 
-    // Attributs
     private int id;
     private String code; // FRS-XXXX
     private String nomEntreprise;
@@ -42,7 +41,6 @@ public class Fournisseur {
     private double totalAchats;
     private int nombreCommandes;
 
-    // Constructeurs
     public Fournisseur() {
         this.code = genererCode();
         this.actif = true;
@@ -68,7 +66,6 @@ public class Fournisseur {
         this.minimumCommande = minimumCommande;
     }
 
-    // Getters & Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -165,15 +162,9 @@ public class Fournisseur {
     public int getNombreCommandes() { return nombreCommandes; }
     public void setNombreCommandes(int nombreCommandes) { this.nombreCommandes = nombreCommandes; }
 
-    // Méthodes métier
     private String genererCode() {
         int seq = SEQUENCE.getAndIncrement();
         return String.format("FRS-%04d", seq);
-    }
-
-    public double calculerTotalAchats() {
-        // Retourne la valeur stockée ; en vrai on sommerait les commandes d'achat
-        return this.totalAchats;
     }
 
     public int getDelaiLivraisonMoyen() {

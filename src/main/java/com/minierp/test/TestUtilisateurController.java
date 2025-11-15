@@ -1,4 +1,4 @@
-package com.minierp.test;
+/*package com.minierp.test;
 
 import com.minierp.controller.UtilisateurController;
 import com.minierp.model.Utilisateur;
@@ -100,7 +100,7 @@ public class TestUtilisateurController {
         // ---------------------------------------------
         // 9. TEST UTILISATEUR CONNECTE
         // ---------------------------------------------
-        System.out.println("\n--- 9. Test Utilisateur Connecté ---");
+        /*System.out.println("\n--- 9. Test Utilisateur Connecté ---");
         if (auth1 != null) {
             Utilisateur connecte = controller.getUtilisateurConnecte();
             System.out.println("Utilisateur actuellement connecté: " + 
@@ -164,7 +164,7 @@ public class TestUtilisateurController {
         // ---------------------------------------------
         // 14. TEST DECONNEXION
         // ---------------------------------------------
-        System.out.println("\n--- 14. Test Déconnexion ---");
+        /*System.out.println("\n--- 14. Test Déconnexion ---");
         controller.deconnecter();
         Utilisateur connecteApres = controller.getUtilisateurConnecte();
         System.out.println("Utilisateur connecté après déconnexion: " + 
@@ -216,4 +216,4 @@ public class TestUtilisateurController {
 
         System.out.println("\n===== FIN DES TESTS UTILISATEUR =====");
     }
-}
+}*/

@@ -33,7 +33,7 @@ public class MouvementStock {
         this.reference = reference;
     }
 
-    // getters / setters
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public Produit getProduit() { return produit; }

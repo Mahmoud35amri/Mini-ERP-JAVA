@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Categorie {
 
-    // Attributs
+   
     private int id;
     private String code;
     private String nom;
@@ -20,7 +20,6 @@ public class Categorie {
     private Date dateModification;
     private int nombreProduits;
 
-    // Constructeurs
     public Categorie() {
         this.actif = true;
         this.dateCreation = new Date();
@@ -39,7 +38,6 @@ public class Categorie {
         this.niveau = parent == null ? 0 : parent.getNiveau() + 1;
     }
 
-    // Getters & Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -76,7 +74,6 @@ public class Categorie {
     public int getNombreProduits() { return nombreProduits; }
     public void setNombreProduits(int nombreProduits) { this.nombreProduits = nombreProduits; }
 
-    // Méthodes métier
     public boolean estSousCategorie() {
         return this.categorieParente != null;
     }
@@ -96,12 +93,10 @@ public class Categorie {
     }
 
     public List<Categorie> getSousCategories() {
-        // placeholder: en vrai on interrogerait la BDD. Ici on renvoie vide.
         return new ArrayList<>();
     }
 
     public List<Produit> getProduits() {
-        // placeholder: récupérer les produits liés à cette catégorie
         return new ArrayList<>();
     }
 

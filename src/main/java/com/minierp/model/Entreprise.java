@@ -5,7 +5,6 @@ import java.util.Objects;
 
 public class Entreprise {
 
-    // === Attributs ===
     private int id;
     private String nom;
     private String raisonSociale;
@@ -25,7 +24,6 @@ public class Entreprise {
     private boolean actif;
     private Date dateModification;
 
-    // === Constructeurs ===
     public Entreprise() {
         this.actif = true;
         this.dateCreation = new Date();
@@ -34,7 +32,6 @@ public class Entreprise {
 
     public Entreprise( String nom, String raisonSociale, String email, String pays) {
         this();
-        //this.id = id;
         this.nom = nom;
         this.raisonSociale = raisonSociale;
         this.email = email;
@@ -66,7 +63,6 @@ public class Entreprise {
         this.dateModification = dateModification;
     }
 
-    // === Getters et Setters ===
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -125,21 +121,12 @@ public class Entreprise {
     public Date getDateModification() { return dateModification; }
     public void setDateModification(Date dateModification) { this.dateModification = dateModification; }
 
-    // === Méthodes métiers ===
+
     public boolean valider() {
         return nom != null && !nom.isEmpty()
                 && email != null && email.contains("@")
                 && raisonSociale != null && !raisonSociale.isEmpty();
     }
-
-    public String getInformationsCompletes() {
-        return String.format(
-                "Entreprise: %s (%s)%nAdresse: %s, %s %s, %s%nTéléphone: %s | Email: %s%nSite Web: %s%nForme juridique: %s | Capital: %.2f TND",
-                nom, raisonSociale, adresse, codePostal, ville, pays, telephone, email, siteWeb,
-                formeJuridique, capital);
-    }
-
-    // === toString, equals, hashCode ===
     @Override
     public String toString() {
         return "Entreprise{" +
@@ -158,7 +145,6 @@ public class Entreprise {
         Entreprise other = (Entreprise) obj;
         return id == other.id && Objects.equals(email, other.email);
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(id, email);

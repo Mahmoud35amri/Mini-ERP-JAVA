@@ -190,8 +190,6 @@ public class Facture {
     public int hashCode() {
         return Objects.hash(id, numeroFacture);
     }
-
-    // getters & setters omitted for brevity — add as needed
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public void setCommande(Commande commande) { this.commande = commande; }

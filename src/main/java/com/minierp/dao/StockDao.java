@@ -128,7 +128,6 @@ public class StockDao {
     }
 
     public boolean inventorierTout() {
-        // méthode simple : crée un mouvement d'inventaire égal à la différence actuelle (no external counts)
         for (Stock s : new ArrayList<>(stocks)) {
             ajusterStock(s.getProduit().getId(), s.getQuantiteActuelle(), "Inventaire global");
         }

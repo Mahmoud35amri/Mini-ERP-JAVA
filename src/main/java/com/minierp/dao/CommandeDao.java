@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 public class CommandeDao {
 
     private static final List<Commande> commandes = new ArrayList<>();
-    private final AtomicInteger idCounter = new AtomicInteger(1);
+    private final AtomicInteger idCounter = new AtomicInteger(0);
 
     public boolean creer(Commande c) {
-        c.setId(idCounter.incrementAndGet());
+        c.setId(idCounter.getAndIncrement());
         commandes.add(c);
         return true;
     }

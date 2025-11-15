@@ -7,6 +7,11 @@ import com.minierp.model.Client;
 import com.minierp.model.Utilisateur;
 import com.minierp.model.StatutsEnums.StatutCommande;
 import com.minierp.model.StatutsEnums.TypeCommande;
+
+import static com.minierp.util.InputUtils.lireInt;
+import static com.minierp.util.InputUtils.lireString;
+import static com.minierp.util.InputUtils.lireStringOptionnel;
+
 import java.util.List;
 import java.util.Scanner;
 public class menuCommande {
@@ -127,8 +132,7 @@ public class menuCommande {
         System.out.println("1. VENTE");
         System.out.println("2. DEVIS");
         System.out.println("3. ACHAT");
-        System.out.print("Choisissez le type (1-3) : ");
-        int typeChoice = Integer.parseInt(scanner.nextLine());
+        int typeChoice = lireInt("Choisissez le type (1-3) : ");
         
         TypeCommande type;
         switch (typeChoice) {
@@ -143,8 +147,7 @@ public class menuCommande {
         // Sélection du client
         System.out.println("\nClients disponibles :");
         clients.forEach(c -> System.out.println(c.getId() + ". " + c.getNom() + " " + c.getPrenom()));
-        System.out.print("ID du client : ");
-        int clientId = Integer.parseInt(scanner.nextLine());
+        int clientId = lireInt("ID du client : ");
         Client client = clientCtrl.rechercherParId(clientId);
         if (client == null) {
             System.out.println("Client non trouvé !");
@@ -154,8 +157,7 @@ public class menuCommande {
         // Sélection de l'utilisateur
         System.out.println("\nUtilisateurs disponibles :");
         utilisateurs.forEach(u -> System.out.println(u.getId() + ". " + u.getNom()));
-        System.out.print("ID de l'utilisateur : ");
-        int userId = Integer.parseInt(scanner.nextLine());
+        int userId = lireInt("ID de l'utilisateur : ");
         Utilisateur utilisateur = userCtrl.rechercherParId(userId);
         if (utilisateur == null) {
             System.out.println("Utilisateur non trouvé !");
@@ -166,19 +168,14 @@ public class menuCommande {
         Commande commande = new Commande(type, client, utilisateur);
         
         // Saisie des informations supplémentaires
-        System.out.print("Montant HT (optionnel) : ");
-        String mtHT = scanner.nextLine();
+        String mtHT = lireStringOptionnel("Montant HT (optionnel) : ");
         if (!mtHT.isEmpty()) {
             commande.setMontantHT(Double.parseDouble(mtHT));
         }
-        
-        System.out.print("Montant TTC (optionnel) : ");
-        String mtTTC = scanner.nextLine();
+        String mtTTC = lireStringOptionnel("Montant TTC (optionnel) : ");
         if (!mtTTC.isEmpty()) {
             commande.setMontantTTC(Double.parseDouble(mtTTC));
         }
-        
-
         boolean succes = controller.creer(commande);
         System.out.println(succes ? "Commande créée avec succès !" : "Échec de la création de la commande.");
     }
@@ -195,40 +192,31 @@ public class menuCommande {
     }
 
     private static void rechercherParId() {
-        System.out.print("\nEntrez l'ID de la commande : ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = lireInt("\nEntrez l'ID de la commande : ");
         Commande commande = controller.rechercherParId(id);
         System.out.println(commande != null ? commande : "Commande non trouvée.");
     }
 
     private static void rechercherParNumero() {
-        System.out.print("\nEntrez le numéro de commande : ");
-        String numero = scanner.nextLine();
+        String numero = lireString("\nEntrez le numéro de commande : ");
         Commande commande = controller.rechercherParNumero(numero);
         System.out.println(commande != null ? commande : "Commande non trouvée.");
     }
 
     private static void modifierCommande() {
-        System.out.print("\nEntrez l'ID de la commande à modifier : ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = lireInt("\nEntrez l'ID de la commande à modifier : ");
         Commande commande = controller.rechercherParId(id);
-        
         if (commande == null) {
             System.out.println("Commande non trouvée.");
             return;
         }
-
         System.out.println("Commande actuelle : " + commande);
         System.out.println("Laissez vide pour ne pas modifier.");
-
-        System.out.print("Nouveau montant HT : ");
-        String mtHT = scanner.nextLine();
+        String mtHT = lireString("Nouveau montant HT : ");
         if (!mtHT.isEmpty()) {
             commande.setMontantHT(Double.parseDouble(mtHT));
         }
-
-        System.out.print("Nouveau montant TTC : ");
-        String mtTTC = scanner.nextLine();
+        String mtTTC = lireString("Nouveau montant TTC : ");
         if (!mtTTC.isEmpty()) {
             commande.setMontantTTC(Double.parseDouble(mtTTC));
         }
@@ -239,8 +227,7 @@ public class menuCommande {
     }
 
     private static void listerParClient() {
-        System.out.print("\nEntrez l'ID du client : ");
-        int clientId = Integer.parseInt(scanner.nextLine());
+        int clientId = lireInt("\nEntrez l'ID du client : ");
         List<Commande> commandes = controller.listerParClient(clientId);
         System.out.println("Commandes du client ID=" + clientId + " (" + commandes.size() + ") :");
         if (commandes.isEmpty()) {
@@ -251,8 +238,7 @@ public class menuCommande {
     }
 
     private static void listerParFournisseur() {
-        System.out.print("\nEntrez l'ID du fournisseur : ");
-        int fournisseurId = Integer.parseInt(scanner.nextLine());
+        int fournisseurId = lireInt("\nEntrez l'ID du fournisseur : ");
         List<Commande> commandes = controller.listerParFournisseur(fournisseurId);
         System.out.println("Commandes du fournisseur ID=" + fournisseurId + " : " + commandes.size());
         if (!commandes.isEmpty()) {
@@ -267,8 +253,7 @@ public class menuCommande {
         System.out.println("3. EN_PREPARATION");
         System.out.println("4. LIVREE");
         System.out.println("5. ANNULEE");
-        System.out.print("Choisissez le statut (1-5) : ");
-        int statutChoice = Integer.parseInt(scanner.nextLine());
+        int statutChoice = lireInt("Choisissez le statut (1-5) : ");
         
         StatutCommande statut;
         switch (statutChoice) {
@@ -290,8 +275,7 @@ public class menuCommande {
     }
 
     private static void changerStatut() {
-        System.out.print("\nEntrez l'ID de la commande : ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = lireInt("\nEntrez l'ID de la commande : ");
         Commande commande = controller.rechercherParId(id);
         
         if (commande == null) {
@@ -306,8 +290,7 @@ public class menuCommande {
         System.out.println("3. EN_PREPARATION");
         System.out.println("4. LIVREE");
         System.out.println("5. ANNULEE");
-        System.out.print("Choisissez le nouveau statut (1-5) : ");
-        int statutChoice = Integer.parseInt(scanner.nextLine());
+        int statutChoice = lireInt("Choisissez le nouveau statut (1-5) : ");;
         
         StatutCommande nouveauStatut;
         switch (statutChoice) {
@@ -353,8 +336,7 @@ public class menuCommande {
     }
 
     private static void supprimerCommande() {
-        System.out.print("\nEntrez l'ID de la commande à supprimer : ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = lireInt("ID de la commande à supprimer : ");
         boolean succes = controller.supprimer(id);
         System.out.println(succes ? "Commande supprimée avec succès." : "Échec de la suppression.");
         System.out.println("Total après suppression: " + controller.listerTout().size());
@@ -376,8 +358,7 @@ public class menuCommande {
     }
 
     private static void validerCommande() {
-        System.out.print("\nEntrez l'ID de la commande à valider : ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = lireInt("ID de la commande à valider : ");
         Commande commande = controller.rechercherParId(id);
         
         if (commande != null) {

@@ -13,10 +13,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ProduitDao {
 
     private final List<Produit> produits = new ArrayList<>();
-    private final AtomicInteger idCounter = new AtomicInteger(1);
+    private final AtomicInteger idCounter = new AtomicInteger(0);
 
     public boolean creer(Produit p) {
-        p.setId(idCounter.incrementAndGet());
+        p.setId(idCounter.getAndIncrement());
         produits.add(p);
         return true;
     }

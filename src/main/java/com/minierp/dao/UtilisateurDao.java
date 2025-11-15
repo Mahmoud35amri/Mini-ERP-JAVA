@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 public class UtilisateurDao {
 
     private final List<Utilisateur> utilisateurs = new ArrayList<>();
-    private final AtomicInteger idCounte = new AtomicInteger(1);
-    private Utilisateur utilisateurConnecte = null;
+    private final AtomicInteger idCounte = new AtomicInteger(0);
+    private final List<Utilisateur> utilisateurConnecte = new ArrayList<>();
 
     public boolean creer(Utilisateur utilisateur) {
         if (utilisateur == null) return false;
@@ -72,22 +72,24 @@ public class UtilisateurDao {
     public Utilisateur authentifier(String email, String motDePasse){
         for (Utilisateur utilisateur : utilisateurs) {
             if (utilisateur.getEmail().equals(email) && utilisateur.getMotDePasse().equals(motDePasse)) {
+                utilisateurConnecte.add(utilisateur);
                 return utilisateur;
             }
         }
         return null;
     }
-    public void deconnecter() {
+    /*public void deconnecter() {
         // Implémentation de la déconnexion
         utilisateurConnecte = null;
-    }
+    }*/
     public boolean changerMotDePasse(int id, String nouveauMotDePasse) {
-        for (Utilisateur utilisateur : utilisateurs) {
-            if (utilisateur.getId() == id) {
-                utilisateur.setMotDePasse(nouveauMotDePasse);
-                return true;
-            }
+        Utilisateur u = rechercherParId(id);
+        if (u != null) {
+            u.setMotDePasse(nouveauMotDePasse);
+            utilisateurConnecte.remove(u);
+            return true;
         }
+        
         return false;
     }
     public String reinitialiserMotDePasse(int id) {
@@ -96,8 +98,7 @@ public class UtilisateurDao {
             String nouveau = "Tmp@" + (int)(Math.random() * 10000);
             u.setMotDePasse(nouveau);
             u.setDateModification(new Date());
-            return nouveau;
-        }
+            return nouveau;}
         return null;
     }
     public boolean verouiller(int id){
@@ -121,7 +122,7 @@ public class UtilisateurDao {
     public int compter(){
         return utilisateurs.size();
     }
-    public Utilisateur getUtilisateurConnecte() {
+    public List<Utilisateur> getUtilisateurConnecte() {
         return utilisateurConnecte;
     }
 

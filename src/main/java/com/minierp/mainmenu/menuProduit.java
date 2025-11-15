@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class menuProduit {
-    private static ProduitController controller = ProduitController.getInstance();
-    private static CategorieController catCtrl = CategorieController.getInstance();
-    private static FournisseurController fourCtrl = FournisseurController.getInstance();
+    private static final ProduitController controller = ProduitController.getInstance();
+    private static final CategorieController catCtrl = CategorieController.getInstance();
+    private static final FournisseurController fourCtrl = FournisseurController.getInstance();
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {

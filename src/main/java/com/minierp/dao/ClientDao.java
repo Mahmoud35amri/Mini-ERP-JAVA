@@ -7,11 +7,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ClientDao {
     private final List<Client> clients = new ArrayList<>();
-    private final AtomicInteger idCounter = new AtomicInteger(1);
+    private final AtomicInteger idCounter = new AtomicInteger(0);
     
 
     public boolean creer(Client c) {
-        c.setId(idCounter.incrementAndGet());
+        c.setId(idCounter.getAndIncrement());
         clients.add(c);
         return true;
     }
@@ -85,5 +85,4 @@ public class ClientDao {
     public int compter() {
         return clients.size();
     }
-
 }

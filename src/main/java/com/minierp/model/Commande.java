@@ -56,7 +56,6 @@ public class Commande {
         this.utilisateur = utilisateur;
     }
 
-    // Getters / Setters (add as needed)
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getNumeroCommande() { return numeroCommande; }
@@ -79,7 +78,6 @@ public class Commande {
     public void setMontantTTC(double montantTTC) { this.montantTTC = montantTTC; }
     public void setMontantHT(double montantHT) { this.montantHT = montantHT; }  
 
-    // Méthodes
     private String genererNumeroCommande() {
         String datePart = new SimpleDateFormat("yyyyMMdd").format(new Date());
         int rand = (int)(Math.random() * 9000) + 1000;
@@ -176,7 +174,6 @@ public class Commande {
 
     private void recalculerMontants() {
         calculerMontantHT();
-        // recalculer remises sur lignes
         double remiseLignes = 0.0;
         for (LigneCommande l : lignesCommande) {
             remiseLignes += l.getMontantRemise();

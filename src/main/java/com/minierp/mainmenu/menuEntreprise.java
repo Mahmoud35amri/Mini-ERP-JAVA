@@ -5,21 +5,19 @@ import java.util.Scanner;
 
 import com.minierp.controller.EntrepriseController;
 import com.minierp.model.Entreprise;
+import com.minierp.util.InputUtils;
 
 public class menuEntreprise {
     private static final EntrepriseController controller = EntrepriseController.getInstance();
     
-    // Scanner partagé pour compatibilité avec MenuGeneral
+    // Scanner partagé pour compatibilité avec MenuGeneral1
+
     private static Scanner scanner;
 
     public static void main(String[] args) {
-        // Utiliser un Scanner local si appelé directement
         Scanner localScanner = new Scanner(System.in);
         lancerAvecScanner(localScanner);
-        // Ne pas fermer le Scanner pour éviter les problèmes avec System.in
     }
-
-    // Nouvelle méthode pour utilisation avec MenuGeneral
     public static void lancerAvecScanner(Scanner sharedScanner) {
         scanner = sharedScanner;
         
@@ -29,7 +27,7 @@ public class menuEntreprise {
 
         while (choix != 0) {
             afficherMenu();
-            choix = lireInt("Votre choix : ");
+            choix = InputUtils.lireInt("Votre choix : ");
 
             switch (choix) {
                 case 1 -> creerEntreprise();
@@ -50,9 +48,6 @@ public class menuEntreprise {
         }
     }
 
-    // ====================================================
-    // MENU
-    // ====================================================
     private static void afficherMenu() {
         System.out.println("\n--- MENU ENTREPRISES ---");
         System.out.println("1. Créer une entreprise");
@@ -67,99 +62,81 @@ public class menuEntreprise {
         System.out.print("Votre choix : ");
     }
 
-    // ====================================================
-    // CREATION
-    // ====================================================
     private static void creerEntreprise() {
         System.out.println("\n=== CRÉATION D'UNE ENTREPRISE ===");
 
-        String nom = lireString("Nom : ");
-        String raison = lireString("Raison sociale : ");
-        String email = lireString("Email : ");
-        String pays = lireString("Pays : ");
+        String nom = InputUtils.lireString("Nom : ");
+        String raison = InputUtils.lireString("Raison sociale : ");
+        String email = InputUtils.lireString("Email : ");
+        String pays = InputUtils.lireString("Pays : ");
 
-        // Informations supplémentaires optionnelles
-        System.out.print("Adresse (optionnel) : ");
-        String adresse = scanner.nextLine().trim();
-        
-        System.out.print("Téléphone (optionnel) : ");
-        String telephone = scanner.nextLine().trim();
-        
-        System.out.print("Site web (optionnel) : ");
-        String siteWeb = scanner.nextLine().trim();
+        // Informations optionnelles
+        String adresse = InputUtils.lireStringOptionnel("Adresse (optionnel) : ");
+        String telephone = InputUtils.lireStringOptionnel("Téléphone (optionnel) : ");
+        String siteWeb = InputUtils.lireStringOptionnel("Site web (optionnel) : ");
 
         Entreprise e = new Entreprise(nom, raison, email, pays);
         
-        // Ajouter les informations optionnelles si fournies
         if (!adresse.isEmpty()) e.setAdresse(adresse);
         if (!telephone.isEmpty()) e.setTelephone(telephone);
         if (!siteWeb.isEmpty()) e.setSiteWeb(siteWeb);
 
         if (!e.valider()) {
-            System.out.println("❌ Données invalides ! Création annulée.");
+            System.out.println(" Données invalides ! Création annulée.");
             return;
         }
 
         boolean succes = controller.creer(e);
         if (succes) {
-            System.out.println("✅ Entreprise créée avec ID : " + e.getId());
+            System.out.println(" Entreprise créée avec ID : " + e.getId());
         } else {
-            System.out.println("❌ Erreur lors de la création de l'entreprise.");
+            System.out.println(" Erreur lors de la création de l'entreprise.");
         }
     }
 
-    // ====================================================
-    // RECHERCHE ID
-    // ====================================================
     private static void rechercherParId() {
-        int id = lireInt("ID à chercher : ");
+        int id = InputUtils.lireInt("ID à chercher : ");
         Entreprise e = controller.rechercherParId(id);
 
         if (e == null)
-            System.out.println("❌ Aucune entreprise trouvée !");
+            System.out.println(" Aucune entreprise trouvée !");
         else {
-            System.out.println("✅ Entreprise trouvée :");
+            System.out.println(" Entreprise trouvée :");
             System.out.println(e);
         }
     }
 
-    // ====================================================
-    // RECHERCHE NOM
-    // ====================================================
     private static void rechercherParNom() {
-        String nom = lireString("Nom contenant : ");
+        String nom = InputUtils.lireString("Nom contenant : ");
         List<Entreprise> liste = controller.rechercherParNom(nom);
 
         if (liste.isEmpty())
-            System.out.println("❌ Aucun résultat !");
+            System.out.println(" Aucun résultat !");
         else {
-            System.out.println("✅ " + liste.size() + " entreprise(s) trouvée(s) :");
+            System.out.println(liste.size() + " entreprise(s) trouvée(s) :");
             liste.forEach(System.out::println);
         }
     }
 
-    // ====================================================
-    // MODIFICATION
-    // ====================================================
     private static void modifierEntreprise() {
-        int id = lireInt("ID à modifier : ");
+        int id = InputUtils.lireInt("ID à modifier : ");
         Entreprise e = controller.rechercherParId(id);
 
         if (e == null) {
-            System.out.println("❌ ID inexistant !");
+            System.out.println(" ID inexistant !");
             return;
         }
 
         System.out.println("Entreprise actuelle : " + e);
         System.out.println("Laissez vide pour ne pas modifier.");
 
-        String nom = lireStringOptionnel("Nouveau nom : ");
-        String raison = lireStringOptionnel("Nouvelle raison sociale : ");
-        String email = lireStringOptionnel("Nouvel email : ");
-        String pays = lireStringOptionnel("Nouveau pays : ");
-        String adresse = lireStringOptionnel("Nouvelle adresse : ");
-        String telephone = lireStringOptionnel("Nouveau téléphone : ");
-        String siteWeb = lireStringOptionnel("Nouveau site web : ");
+        String nom = InputUtils.lireStringOptionnel("Nouveau nom : ");
+        String raison = InputUtils.lireStringOptionnel("Nouvelle raison sociale : ");
+        String email = InputUtils.lireStringOptionnel("Nouvel email : ");
+        String pays = InputUtils.lireStringOptionnel("Nouveau pays : ");
+        String adresse = InputUtils.lireStringOptionnel("Nouvelle adresse : ");
+        String telephone = InputUtils.lireStringOptionnel("Nouveau téléphone : ");
+        String siteWeb = InputUtils.lireStringOptionnel("Nouveau site web : ");
 
         if (!nom.isEmpty()) e.setNom(nom);
         if (!raison.isEmpty()) e.setRaisonSociale(raison);
@@ -170,24 +147,21 @@ public class menuEntreprise {
         if (!siteWeb.isEmpty()) e.setSiteWeb(siteWeb);
 
         if (!e.valider()) {
-            System.out.println("❌ Données invalides ! Modification annulée.");
+            System.out.println(" Données invalides ! Modification annulée.");
             return;
         }
 
         boolean succes = controller.modifier(e);
         if (succes) {
-            System.out.println("✅ Modification réussie.");
+            System.out.println(" Modification réussie.");
             System.out.println("Entreprise après modification : " + e);
         } else {
-            System.out.println("❌ Erreur lors de la modification.");
+            System.out.println(" Erreur lors de la modification.");
         }
     }
 
-    // ====================================================
-    // SUPPRESSION
-    // ====================================================
     private static void supprimerEntreprise() {
-        int id = lireInt("ID à supprimer : ");
+        int id = InputUtils.lireInt("ID à supprimer : ");
 
         // Demander confirmation
         Entreprise e = controller.rechercherParId(id);
@@ -198,18 +172,15 @@ public class menuEntreprise {
             
             if (confirmation.equalsIgnoreCase("o")) {
                 boolean ok = controller.supprimer(id);
-                System.out.println(ok ? "✅ Suppression réussie." : "❌ ID introuvable.");
+                System.out.println(ok ? " Suppression réussie." : " ID introuvable.");
             } else {
-                System.out.println("❌ Suppression annulée.");
+                System.out.println(" Suppression annulée.");
             }
         } else {
-            System.out.println("❌ Entreprise non trouvée.");
+            System.out.println(" Entreprise non trouvée.");
         }
     }
 
-    // ====================================================
-    // LISTES
-    // ====================================================
     private static void listerToutes() {
         System.out.println("\n=== LISTE DE TOUTES LES ENTREPRISES ===");
         List<Entreprise> entreprises = controller.listerTout();
@@ -232,21 +203,18 @@ public class menuEntreprise {
         }
     }
 
-    // ====================================================
-    // DESACTIVATION
-    // ====================================================
     private static void desactiverEntreprise() {
-        int id = lireInt("ID à désactiver : ");
+        int id = InputUtils.lireInt("ID à désactiver : ");
 
         Entreprise e = controller.rechercherParId(id);
 
         if (e == null) {
-            System.out.println("❌ ID inexistant !");
+            System.out.println(" ID inexistant !");
             return;
         }
 
         if (!e.isActif()) {
-            System.out.println("⚠️ Cette entreprise est déjà désactivée.");
+            System.out.println(" Cette entreprise est déjà désactivée.");
             return;
         }
 
@@ -257,39 +225,9 @@ public class menuEntreprise {
         if (confirmation.equalsIgnoreCase("o")) {
             e.setActif(false);
             boolean succes = controller.modifier(e);
-            System.out.println(succes ? "✅ Entreprise désactivée." : "❌ Erreur lors de la désactivation.");
+            System.out.println(succes ? " Entreprise désactivée." : " Erreur lors de la désactivation.");
         } else {
-            System.out.println("❌ Désactivation annulée.");
+            System.out.println(" Désactivation annulée.");
         }
-    }
-
-    // ====================================================
-    // FONCTIONS UTILITAIRES
-    // ====================================================
-    private static int lireInt(String msg) {
-        while (true) {
-            try {
-                System.out.print(msg);
-                return Integer.parseInt(scanner.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println("❌ Veuillez saisir un nombre valide !");
-            }
-        }
-    }
-
-    private static String lireString(String msg) {
-        String s;
-        do {
-            System.out.print(msg);
-            s = scanner.nextLine().trim();
-            if (s.isEmpty())
-                System.out.println("❌ Ce champ ne peut pas être vide !");
-        } while (s.isEmpty());
-        return s;
-    }
-
-    private static String lireStringOptionnel(String msg) {
-        System.out.print(msg);
-        return scanner.nextLine().trim();
     }
 }

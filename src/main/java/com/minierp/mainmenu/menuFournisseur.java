@@ -1,18 +1,26 @@
 package com.minierp.mainmenu;
 import com.minierp.controller.FournisseurController;
 import com.minierp.model.Fournisseur;
+import static com.minierp.util.InputUtils.lireInt;
+import static com.minierp.util.InputUtils.lireString;
+import static com.minierp.util.InputUtils.lireStringOptionnel;
 
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+
+
+
 public class menuFournisseur {
-    private static final Scanner scanner = new Scanner(System.in);
-
+    private static final FournisseurController controller = FournisseurController.getInstance();
+    private static Scanner scanner;
     public static void main(String[] args) {
-        FournisseurController controller = FournisseurController.getInstance();
-
+        
+        Scanner localScanner = new Scanner(System.in);
+        lancerAvecScanner(localScanner);
+    }    
+    public static void lancerAvecScanner(Scanner sharedScanner) {
         System.out.println("===== MENU TEST FOURNISSEUR CONTROLLER =====");
-
+        scanner = sharedScanner;
         int choix;
         do {
             afficherMenu();
@@ -34,7 +42,7 @@ public class menuFournisseur {
                 case 13 -> validerFournisseur(controller);
                 case 14 -> statistiques(controller);
                 case 0 -> System.out.println("Retour au menu principal...");
-                default -> System.out.println("❌ Choix invalide !");
+                default -> System.out.println(" Choix invalide !");
             }
 
         } while (choix != 0);
@@ -64,42 +72,18 @@ public class menuFournisseur {
         System.out.println("==================================");
     }
 
-    // ====================== OUTILS DE LECTURE ========================= //
-
-    private static int lireInt(String message) {
-        while (true) {
-            try {
-                System.out.print(message);
-                return scanner.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("❌ Veuillez entrer un nombre entier !");
-                scanner.nextLine();
-            }
-        }
-    }
-
-    private static String lireString(String message) {
-        System.out.print(message);
-        scanner.nextLine();
-        return scanner.nextLine().trim();
-    }
 
     // ====================== FONCTIONS DU MENU ========================== //
 
     private static void creerFournisseur(FournisseurController controller) {
         System.out.println("\n--- Création Fournisseur ---");
-
         int id = lireInt("ID : ");
-        scanner.nextLine();
-
         String nom = lireString("Nom entreprise : ");
         String email = lireString("Email : ");
-
         Fournisseur f = new Fournisseur(id, nom, email);
 
         System.out.println(controller.creer(f) ?
-                "✅ Fournisseur créé !" :
-                "❌ Échec création !");
+                " Fournisseur créé !" : " Échec création !");
     }
 
     private static void listerTout(FournisseurController controller) {
@@ -111,25 +95,20 @@ public class menuFournisseur {
         int id = lireInt("ID du fournisseur : ");
 
         Fournisseur f = controller.rechercherParId(id);
-        System.out.println(f != null ? f : "❌ Non trouvé");
+        System.out.println(f != null ? f : " Non trouvé");
     }
 
     private static void rechercherParCode(FournisseurController controller) {
-        scanner.nextLine();
         String code = lireString("Code fournisseur : ");
-
         Fournisseur f = controller.rechercherParCode(code);
-        System.out.println(f != null ? f : "❌ Non trouvé");
+        System.out.println(f != null ? f : " Non trouvé");
     }
 
     private static void rechercherParNom(FournisseurController controller) {
-        scanner.nextLine();
         String nom = lireString("Nom (ou partie) : ");
-
         List<Fournisseur> resultats = controller.rechercherParNom(nom);
-
         if (resultats.isEmpty())
-            System.out.println("❌ Aucun résultat");
+            System.out.println(" Aucun résultat");
         else
             resultats.forEach(System.out::println);
     }
@@ -137,24 +116,19 @@ public class menuFournisseur {
     private static void modifierFournisseur(FournisseurController controller) {
         int id = lireInt("ID du fournisseur à modifier : ");
         Fournisseur f = controller.rechercherParId(id);
-
         if (f == null) {
-            System.out.println("❌ Fournisseur introuvable");
+            System.out.println(" Fournisseur introuvable");
             return;
         }
-
-        scanner.nextLine();
         System.out.println("Laisser vide pour ne pas modifier.");
-
-        String tel = lireString("Nouveau téléphone : ");
+        String tel = lireStringOptionnel("Nouveau téléphone : ");
         if (!tel.isEmpty()) f.setTelephone(tel);
-
-        String adr = lireString("Nouvelle adresse : ");
+        String adr = lireStringOptionnel("Nouvelle adresse : ");
         if (!adr.isEmpty()) f.setAdresse(adr);
 
         System.out.println(controller.modifier(f) ?
-                "✅ Modifié !" :
-                "❌ Échec modification");
+                " Modifié !" :
+                " Échec modification");
     }
 
     private static void listerActifs(FournisseurController controller) {
@@ -165,10 +139,9 @@ public class menuFournisseur {
     private static void evaluerFournisseur(FournisseurController controller) {
         int id = lireInt("ID : ");
         int note = lireInt("Note (1-5) : ");
-
         System.out.println(controller.evaluer(id, note) ?
-                "✅ Évalué !" :
-                "❌ Échec évaluation");
+                " Évalué !" :
+                " Échec évaluation");
     }
 
     private static void listerParEvaluation(FournisseurController controller) {
@@ -176,7 +149,7 @@ public class menuFournisseur {
         List<Fournisseur> liste = controller.listerParEvaluation(note);
 
         if (liste.isEmpty())
-            System.out.println("❌ Aucun fournisseur trouvée");
+            System.out.println(" Aucun fournisseur trouvée");
         else
             liste.forEach(f -> System.out.println(f.getNomEntreprise()));
     }
@@ -184,7 +157,6 @@ public class menuFournisseur {
     private static void calculerTotalAchats(FournisseurController controller) {
         int id = lireInt("ID fournisseur : ");
         double total = controller.calculerTotalAchats(id);
-
         System.out.println("Total Achats : " + total + " DT");
     }
 
@@ -193,30 +165,27 @@ public class menuFournisseur {
         Fournisseur f = controller.rechercherParId(id);
 
         if (f == null) {
-            System.out.println("❌ Introuvable !");
+            System.out.println(" Introuvable !");
             return;
         }
 
         f.setActif(false);
         controller.modifier(f);
 
-        System.out.println("✅ Désactivé !");
+        System.out.println(" Désactivé !");
     }
 
     private static void supprimerFournisseur(FournisseurController controller) {
         int id = lireInt("ID à supprimer : ");
-
         System.out.println(controller.supprimer(id) ?
-                "✅ Supprimé !" :
-                "❌ Échec suppression");
+                " Supprimé !" :
+                " Échec suppression");
     }
 
     private static void validerFournisseur(FournisseurController controller) {
         System.out.println("\n--- Test Validation ---");
-
         Fournisseur invalide = new Fournisseur(0, "", "fake-email");
         System.out.println("Fournisseur invalide valide ? " + invalide.valider());
-
         if (!controller.listerTout().isEmpty()) {
             Fournisseur f = controller.listerTout().get(0);
             System.out.println("Premier fournisseur valide ? " + f.valider());

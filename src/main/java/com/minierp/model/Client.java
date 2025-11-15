@@ -11,7 +11,6 @@ public class Client {
 
     private static final AtomicInteger SEQUENCE = new AtomicInteger(1000);
 
-    // Attributs
     private int id;
     private String code; // CLI-XXXX
     private TypeClient type;
@@ -50,7 +49,6 @@ public class Client {
             return String.format("CLI-%04d", seq);
         }
         
-    // Constructeurs
     public Client() {
 
         this.code = genererCode();
@@ -81,7 +79,6 @@ public class Client {
         this.plafondCredit = plafondCredit;
     }
 
-    // Getters & Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -175,21 +172,13 @@ public class Client {
     public Date getDernierAchat() { return dernierAchat; }
     public void setDernierAchat(Date dernierAchat) { this.dernierAchat = dernierAchat; }
 
-    // Méthodes métier
     public String getNomComplet() {
         if (nom == null && prenom == null) return "";
         if (prenom == null) return nom;
         if (nom == null) return prenom;
         return prenom + " " + nom;
     }
-
     
-
-    public double calculerChiffreAffaires() {
-        // Ici on renvoie la valeur stockée ; en vrai on ferait la somme des factures liées
-        return this.chiffreAffaires;
-    }
-
     public String getCategorieClient() {
         if (categorie == null) return "N/A";
         return categorie.name();
@@ -197,12 +186,10 @@ public class Client {
 
     public boolean peutCommander() {
         if (!actif) return false;
-        // Simple règle : si plafondCredit >= 0 ou client particulier, autorisé
         return (this.plafondCredit <= 0) ? true : (this.chiffreAffaires <= this.plafondCredit);
     }
 
     public boolean estBloque() {
-        // Exemple simple : inactif ou dépassement de plafond
         return !this.actif || (this.plafondCredit > 0 && this.chiffreAffaires > this.plafondCredit);
     }
 

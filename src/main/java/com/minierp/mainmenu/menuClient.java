@@ -2,8 +2,13 @@ package com.minierp.mainmenu;
 import com.minierp.controller.ClientController;
 import com.minierp.model.Client;
 import com.minierp.model.Client.TypeClient;
+import static com.minierp.util.InputUtils.lireString;
+import static com.minierp.util.InputUtils.lireDouble;
+import static com.minierp.util.InputUtils.lireInt;
 import java.util.List;
 import java.util.Scanner;
+
+
 public class menuClient {
     
 
@@ -116,40 +121,25 @@ public class menuClient {
         TypeClient type = (typeChoice == 2) ? TypeClient.ENTREPRISE : TypeClient.PARTICULIER;
 
         if (type == TypeClient.PARTICULIER) {
-            System.out.print("Nom : ");
-            String nom = scanner.nextLine();
-            System.out.print("Prénom : ");
-            String prenom = scanner.nextLine();
-            System.out.print("Email : ");
-            String email = scanner.nextLine();
-            
+            String nom = lireString("Nom : ");
+            String prenom =  lireString("Prénom : ");
+            String email = lireString("Email : ");
             Client client = new Client(nom, prenom, email);
             boolean succes = controller.creer(client);
             System.out.println(succes ? "Client créé avec succès !" : "Échec de la création du client.");
             
         } else {
-            System.out.print("Civilité (M., Mme, etc.) : ");
-            String civilite = scanner.nextLine();
-            System.out.print("Nom : ");
-            String nom = scanner.nextLine();
-            System.out.print("Prénom : ");
-            String prenom = scanner.nextLine();
-            System.out.print("Nom de l'entreprise : ");
-            String nomEntreprise = scanner.nextLine();
-            System.out.print("Adresse : ");
-            String adresse = scanner.nextLine();
-            System.out.print("Ville : ");
-            String ville = scanner.nextLine();
-            System.out.print("Code postal : ");
-            String codePostal = scanner.nextLine();
-            System.out.print("Pays : ");
-            String pays = scanner.nextLine();
-            System.out.print("Téléphone : ");
-            String telephone = scanner.nextLine();
-            System.out.print("Email : ");
-            String email = scanner.nextLine();
-            System.out.print("Plafond de crédit : ");
-            double plafondCredit = Double.parseDouble(scanner.nextLine());
+            String civilite = lireString("Civilité (M., Mme, etc.) : ");
+            String nom = lireString("Nom : ");
+            String prenom = lireString("Prénom : ");
+            String nomEntreprise = lireString("Nom de l'entreprise : ");
+            String adresse = lireString("Adresse : ");
+            String ville = lireString("Ville : ");
+            String codePostal = lireString("Code postal : ");
+            String pays = lireString("Pays : ");
+            String telephone = lireString("Téléphone : ");
+            String email = lireString("Email : ");
+            double plafondCredit = lireDouble("Plafond de crédit : ");
 
             Client client = new Client(type, civilite, nom, prenom, nomEntreprise, 
                                      adresse, ville, codePostal, pays, telephone, email, plafondCredit);
@@ -169,22 +159,19 @@ public class menuClient {
     }
 
     private static void rechercherParId() {
-        System.out.print("\nEntrez l'ID du client : ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = lireInt("\nEntrez l'ID d'un client : ");
         Client client = controller.rechercherParId(id);
         System.out.println(client != null ? client : "Client non trouvé.");
     }
 
     private static void rechercherParCode() {
-        System.out.print("\nEntrez le code du client : ");
-        String code = scanner.nextLine();
+        String code = lireString("\nEntrez le code du client : ");
         Client client = controller.rechercherParCode(code);
         System.out.println(client != null ? client : "Client non trouvé.");
     }
 
     private static void rechercherParNom() {
-        System.out.print("\nEntrez le nom à rechercher : ");
-        String nom = scanner.nextLine();
+        String nom = lireString("\nEntrez le nom à rechercher : ");
         List<Client> clients = controller.rechercherParNom(nom);
         if (clients.isEmpty()) {
             System.out.println("Aucun client trouvé avec ce nom.");
@@ -201,8 +188,7 @@ public class menuClient {
     }
 
     private static void modifierClient() {
-        System.out.print("\nEntrez l'ID du client à modifier : ");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = lireInt("\nEntrez l'ID du client à modifier : ");
         Client client = controller.rechercherParId(id);
         
         if (client == null) {

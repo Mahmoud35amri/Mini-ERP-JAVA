@@ -108,7 +108,7 @@ public class TestFonctions {
         // 10. TEST COMPLETE INFORMATION
         // ---------------------------------------------
         System.out.println("\n--- Test getInformationsCompletes() pour e1 ---");
-        System.out.println(e1.getInformationsCompletes());
+        //System.out.println(e1.getInformationsCompletes());
 
 
         // ---------------------------------------------

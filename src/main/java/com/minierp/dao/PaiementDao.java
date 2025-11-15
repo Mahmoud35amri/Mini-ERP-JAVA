@@ -10,14 +10,13 @@ import java.util.stream.Collectors;
 
 public class PaiementDao {
 
-    // === Attributs ===
     private final List<Paiement> paiements = new ArrayList<>();
     private final AtomicInteger idCounter = new AtomicInteger(0);
 
-    // === CRUD ===
+
     public boolean creer(Paiement p) {
         if (p == null) return false;
-        p.setId(idCounter.incrementAndGet());
+        p.setId(idCounter.getAndIncrement());
         paiements.add(p);
         return true;
     }
@@ -37,7 +36,6 @@ public class PaiementDao {
         return paiements.removeIf(p -> p.getId() == id);
     }
 
-    // === RECHERCHES ===
     public Paiement rechercherParId(int id) {
         return paiements.stream()
                 .filter(p -> p.getId() == id)

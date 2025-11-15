@@ -2,27 +2,21 @@ package com.minierp.model;
 
 import java.util.Date;
 import java.util.Objects;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 public class Utilisateur {
 
-    // === Énumération Role ===
     public enum Role {
-        ADMIN,       // toutes permissions
-        GERANT,      // gestion complète sauf utilisateurs
-        EMPLOYE,     // lecture/écriture limitée
-        VENDEUR      // commandes et clients uniquement
+        ADMIN,       
+        GERANT,      
+        EMPLOYE,     
+        VENDEUR      
     }
 
-    // === Attributs ===
     private int id;
     private String nom;
     private String prenom;
     private String email;
-    private String motDePasse; // hashé
-    private String salt;
+    private String motDePasse; 
     private Role role;
     private String telephone;
     private String adresse;
@@ -36,12 +30,10 @@ public class Utilisateur {
     private Date dateCreation;
     private Date dateModification;
 
-    // === Constructeurs ===
     public Utilisateur() {
         this.actif = true;
         this.dateCreation = new Date();
         this.dateModification = new Date();
-        this.salt = genererSalt();
     }
 
     public Utilisateur(int id, String nom, String prenom, String email, String motDePasse, Role role) {
@@ -50,12 +42,10 @@ public class Utilisateur {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
-        this.motDePasse = hasherMotDePasse(motDePasse, this.salt);
+        this.motDePasse = motDePasse;
         this.role = role;
-        
     }
 
-    // === Getters et Setters ===
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -69,12 +59,7 @@ public class Utilisateur {
     public void setEmail(String email) { this.email = email; }
 
     public String getMotDePasse() { return motDePasse; }
-    public void setMotDePasse(String motDePasse) {
-        this.motDePasse = hasherMotDePasse(motDePasse, this.salt);
-    }
-
-    public String getSalt() { return salt; }
-    public void setSalt(String salt) { this.salt = salt; }
+    public void setMotDePasse(String motDePasse) {this.motDePasse = motDePasse;}
 
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
@@ -112,72 +97,14 @@ public class Utilisateur {
     public Date getDateModification() { return dateModification; }
     public void setDateModification(Date dateModification) { this.dateModification = dateModification; }
 
-    // === Méthodes utilitaires ===
-    private String genererSalt() {
-        SecureRandom random = new SecureRandom();
-        byte[] bytes = new byte[16];
-        random.nextBytes(bytes);
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) sb.append(String.format("%02x", b));
-        return sb.toString();
-    }
 
-    private String hasherMotDePasse(String motDePasse, String salt) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            String input = motDePasse + salt;
-            byte[] hash = md.digest(input.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hash) sb.append(String.format("%02x", b));
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Erreur de hachage du mot de passe", e);
-        }
-    }
-
-    // === Méthodes métiers ===
-    public boolean authentifier(String email, String motDePasse) {
-        if (!this.email.equalsIgnoreCase(email)) return false;
-        String hash = hasherMotDePasse(motDePasse, this.salt);
-        if (hash.equals(this.motDePasse)) {
-            this.tentativesEchouees = 0;
-            this.nombreConnexions++;
-            this.dernierConnexion = new Date();
-            return true;
-        } else {
-            this.tentativesEchouees++;
-            return false;
-        }
-    }
-
-    public boolean changerMotDePasse(String ancienMdp, String nouveauMdp) {
-        if (authentifier(this.email, ancienMdp)) {
-            setMotDePasse(nouveauMdp);
-            this.dateModification = new Date();
-            return true;
-        }
-        return false;
-    }
-
-    public String reinitialiserMotDePasse() {
-        String nouveau = "Tmp@" + (int)(Math.random() * 10000);
-        setMotDePasse(nouveau);
-        this.dateModification = new Date();
-        return nouveau;
-    }
-
-    public void verouiller() {
-        this.actif = false;
-    }
+    public void verouiller() {this.actif = false;}
 
     public void deverouiller() {
         this.actif = true;
-        this.tentativesEchouees = 0;
-    }
-
-    public String getNomComplet() {
-        return prenom + " " + nom;
-    }
+        this.tentativesEchouees = 0;}
+        
+    public String getNomComplet() {return prenom + " " + nom;}
 
     public int getAge() {
         if (dateNaissance == null) return 0;
@@ -207,7 +134,6 @@ public class Utilisateur {
         return role != null;
     }
 
-    // === toString, equals, hashCode ===
     @Override
     public String toString() {
         return "Utilisateur{" +

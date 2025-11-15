@@ -68,7 +68,7 @@ public class Stock {
         MouvementStock m = new MouvementStock(produit, com.minierp.model.StatutsEnums.TypeMouvement.ENTREE, quantite, avant, utilisateur, motif, "AJOUT");
         m.setQuantiteApres(this.quantiteActuelle);
         mouvements.add(m);
-        if (produit != null) produit.ajusterStock(quantite); // keep produit stock consistent if used
+        if (produit != null) produit.ajusterStock(quantite); 
     }
 
     public void retirer(int quantite, String motif, Utilisateur utilisateur) {
@@ -86,7 +86,7 @@ public class Stock {
         int canReserve = Math.min(quantite, calculerQuantiteDisponible());
         this.quantiteReservee += canReserve;
         calculerQuantiteDisponible();
-        // reservation movement can be recorded separately if needed
+       
     }
 
     public void libererReservation(int quantite) {
@@ -106,7 +106,6 @@ public class Stock {
 
     public void inventorier() {
         this.dateInventaire = new Date();
-        // logic to set quantiteInitiale = quantiteActuelle etc.
         this.quantiteInitiale = this.quantiteActuelle;
     }
 

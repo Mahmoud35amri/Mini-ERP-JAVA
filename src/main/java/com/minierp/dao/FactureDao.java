@@ -13,14 +13,13 @@ import com.minierp.model.StatutsEnums;
 
 public class FactureDao {
 
-    // === Attributs ===
     private final List<Facture> factures = new ArrayList<>();
     private final AtomicInteger idCounter = new AtomicInteger(1);
 
-    // === CRUD ===
+
     public boolean creer(Facture f) {
         if (f == null) return false;
-        f.setId(idCounter.incrementAndGet());
+        f.setId(idCounter.getAndIncrement());
         factures.add(f);
         return true;
     }
@@ -28,7 +27,7 @@ public class FactureDao {
     public Facture genererDepuisCommande(Commande c) {
         if (c == null) return null;
         Facture f = new Facture();
-        f.setId(idCounter.incrementAndGet());
+        f.setId(idCounter.getAndIncrement());
         f.setCommande(c);
         f.setDateCreation(new Date());
         factures.add(f);
@@ -50,7 +49,6 @@ public class FactureDao {
         return factures.removeIf(f -> f.getId() == id);
     }
 
-    // === RECHERCHES ===
     public Facture rechercherParId(int id) {
         return factures.stream()
                 .filter(f -> f.getId() == id)

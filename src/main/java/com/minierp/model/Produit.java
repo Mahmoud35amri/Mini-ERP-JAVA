@@ -9,7 +9,6 @@ public class Produit {
         PIECE, KG, GRAMME, LITRE, MILLILITRE, METRE, CENTIMETRE, PACK, CARTON
     }
 
-    // Attributs
     private int id;
     private String reference;
     private String codeBarres;
@@ -41,7 +40,7 @@ public class Produit {
     private int garantie; // mois
     private String observations;
 
-    // Constructeurs
+
     public Produit() {
         this.actif = true;
         this.unite = Unite.PIECE;
@@ -64,7 +63,7 @@ public class Produit {
         this.quantiteStock = quantiteStock;
     }
 
-    // Getters & Setters
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -155,7 +154,6 @@ public class Produit {
     public String getObservations() { return observations; }
     public void setObservations(String observations) { this.observations = observations; }
 
-    // Méthodes métier
     public double calculerMarge() {
         return this.prixVente - this.prixAchat;
     }

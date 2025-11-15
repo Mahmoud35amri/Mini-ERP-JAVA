@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 public class LigneCommandeDao {
 
     private final List<LigneCommande> lignesCommande = new ArrayList<>();
-    private final AtomicInteger idCounter = new AtomicInteger(1);
+    private final AtomicInteger idCounter = new AtomicInteger(0);
 
     public boolean creer(LigneCommande l) {
-        l.setId(idCounter.incrementAndGet());
+        l.setId(idCounter.getAndIncrement());
         lignesCommande.add(l);
         return true;
     }
@@ -61,7 +61,7 @@ public class LigneCommandeDao {
     }
 
     public boolean verifierDisponibilite(LigneCommande l) {
-        // Simulation: toujours disponible pour l'instant
+        
         return true;
     }
 

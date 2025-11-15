@@ -34,7 +34,6 @@ public class LigneCommande {
         recalculer();
     }
 
-    // getters / setters (omitted here for brevity — add as needed)
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public Commande getCommande() { return commande; }
@@ -59,10 +58,8 @@ public class LigneCommande {
     public double getMontantTTC() { return montantTTC; }
     public String getObservations() { return observations; }
     public void setObservations(String observations) { this.observations = observations; }
-    //public Date getDateCreation() { return dateCreation; }
-    //public void setDateCreation(Date dateCreation) { this.dateCreation = dateCreation; }
+    
 
-    // Calculs
     public double calculerMontantHT() {
         double total = prixUnitaireHT * quantite;
         montantRemise = total * (tauxRemise / 100.0);

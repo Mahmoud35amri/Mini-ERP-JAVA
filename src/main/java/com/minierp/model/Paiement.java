@@ -55,7 +55,6 @@ public class Paiement {
         this.observations = motif;
     }
 
-    // getters / setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public Facture getFacture() { return facture; }

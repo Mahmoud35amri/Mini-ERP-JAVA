@@ -45,9 +45,7 @@ public class UtilisateurController {
     public Utilisateur authentifier(String email, String motDePasse){
         return utilisateurDao.authentifier(email, motDePasse);        
     }
-    public void deconnecter() {
-        utilisateurDao.deconnecter();
-    }
+
     public boolean changerMotDePasse(int id, String nouveauMotDePasse) {
         return utilisateurDao.changerMotDePasse(id, nouveauMotDePasse);
     }
@@ -63,7 +61,7 @@ public class UtilisateurController {
     public int compter(){
         return utilisateurDao.compter();
     }
-    public Utilisateur getUtilisateurConnecte() {
+    public List<Utilisateur> getUtilisateurConnecte() {
         return utilisateurDao.getUtilisateurConnecte();
     }
 }

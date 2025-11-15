@@ -9,10 +9,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FournisseurDao {
 
     private final List<Fournisseur> fournisseurs = new ArrayList<>();
-    private final AtomicInteger idCounter = new AtomicInteger(1);
+    private final AtomicInteger idCounter = new AtomicInteger(0);
 
     public boolean creer(Fournisseur fournisseur) {
-        fournisseur.setId(idCounter.incrementAndGet());
+        fournisseur.setId(idCounter.getAndIncrement());
         fournisseurs.add(fournisseur);
         return true;
     }

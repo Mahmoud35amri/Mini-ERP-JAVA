@@ -2,6 +2,8 @@ package com.minierp.mainmenu;
 import com.minierp.controller.UtilisateurController;
 import com.minierp.model.Utilisateur;
 import com.minierp.model.Utilisateur.Role;
+import static com.minierp.util.InputUtils.lireInt;
+import static com.minierp.util.InputUtils.lireString;
 
 import java.util.List;
 import java.util.Scanner;
@@ -32,6 +34,7 @@ public class menuUtilisateur {
                 case 8 -> changerMotDePasse(controller);
                 case 9 -> listerActifs(controller);
                 case 10 -> listerParRole(controller);
+                case 11 -> listerUtlisateursConnectes(controller);
                 case 0 -> System.out.println("Retour au menu principal...");
                 default -> System.out.println(" Choix invalide.");
 
@@ -62,6 +65,7 @@ public class menuUtilisateur {
                 8. Changer mot de passe
                 9. Lister utilisateurs actifs
                 10. Lister par rôle
+                11. Lister utilisateurs connectés
                 0. Retour au menu principal
                 """);
     }
@@ -69,27 +73,6 @@ public class menuUtilisateur {
     // ============================================================
     // UTILITAIRES SÉCURISÉS
     // ============================================================
-
-    private static int lireInt(String message) {
-        while (true) {
-            try {
-                System.out.print(message);
-                return Integer.parseInt(scanner.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println(" Entrez un nombre valide.");
-            }
-        }
-    }
-
-    private static String lireStringObligatoire(String message) {
-        String s;
-        do {
-            System.out.print(message);
-            s = scanner.nextLine().trim();
-            if (s.isEmpty()) System.out.println(" Ce champ est obligatoire.");
-        } while (s.isEmpty());
-        return s;
-    }
 
     private static Role lireRole() {
         while (true) {
@@ -109,10 +92,10 @@ public class menuUtilisateur {
     private static void creerUtilisateur(UtilisateurController controller) {
 
         int id = lireInt("ID : ");
-        String nom = lireStringObligatoire("Nom : ");
-        String prenom = lireStringObligatoire("Prénom : ");
-        String email = lireStringObligatoire("Email : ");
-        String mdp = lireStringObligatoire("Mot de passe : ");
+        String nom = lireString("Nom : ");
+        String prenom = lireString("Prénom : ");
+        String email = lireString("Email : ");
+        String mdp = lireString("Mot de passe : ");
         Role role = lireRole();
 
         Utilisateur u = new Utilisateur(id, nom, prenom, email, mdp, role);
@@ -142,7 +125,7 @@ public class menuUtilisateur {
     }
 
     private static void rechercherParEmail(UtilisateurController controller) {
-        String email = lireStringObligatoire("Email : ");
+        String email = lireString("Email : ");
         Utilisateur u = controller.rechercherParEmail(email);
         System.out.println(u == null ? " Non trouvé." : u);
     }
@@ -156,8 +139,8 @@ public class menuUtilisateur {
             return;
         }
 
-        String nom = lireStringObligatoire("Nouveau nom : ");
-        String prenom = lireStringObligatoire("Nouveau prénom : ");
+        String nom = lireString("Nouveau nom : ");
+        String prenom = lireString("Nouveau prénom : ");
         Role role = lireRole();
 
         u.setNom(nom);
@@ -175,8 +158,8 @@ public class menuUtilisateur {
     }
 
     private static void authentifier(UtilisateurController controller) {
-        String email = lireStringObligatoire("Email : ");
-        String mdp = lireStringObligatoire("Mot de passe : ");
+        String email = lireString("Email : ");
+        String mdp = lireString("Mot de passe : ");
 
         Utilisateur u = controller.authentifier(email, mdp);
         System.out.println(u == null ? " Connexion échouée." : " Connecté : " + u.getNom());
@@ -184,7 +167,7 @@ public class menuUtilisateur {
 
     private static void changerMotDePasse(UtilisateurController controller) {
         int id = lireInt("ID : ");
-        String newPass = lireStringObligatoire("Nouveau mot de passe : ");
+        String newPass = lireString("Nouveau mot de passe : ");
 
         boolean ok = controller.changerMotDePasse(id, newPass);
         System.out.println(ok ? " Mot de passe modifié." : " Échec.");
@@ -201,5 +184,14 @@ public class menuUtilisateur {
         List<Utilisateur> liste = controller.listerParRole(role);
         System.out.println("Utilisateurs " + role + " : " + liste.size());
         liste.forEach(System.out::println);
+    }
+    private static void listerUtlisateursConnectes(UtilisateurController controller) {
+        List<Utilisateur> connectes = controller.getUtilisateurConnecte();
+        if (connectes == null || connectes.isEmpty()) {
+            System.out.println(" Aucun utilisateur connecté.");
+            return;
+        }
+        System.out.println("Utilisateurs connectés : " + connectes.size());
+        connectes.forEach(u -> System.out.println(u.getEmail()));
     }
 }
